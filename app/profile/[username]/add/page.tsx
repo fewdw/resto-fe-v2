@@ -5,6 +5,7 @@ const page = () => {
   return (
     <div>
       <ProfileTabs username={"username"} selectedTab={1} />
+      user id add profile
     </div>
   );
 };

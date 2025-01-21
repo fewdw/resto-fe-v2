@@ -5,6 +5,7 @@ const page = () => {
   return (
     <div>
       <ProfileTabs username={"username"} selectedTab={0} />
+      user id favorite profile
     </div>
   );
 };
