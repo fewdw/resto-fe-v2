@@ -6,7 +6,7 @@ const LandingPageHero = () => {
       <div className="mx-auto max-w-screen-xl px-4 pt-16 lg:flex lg:items-center">
         <div className="mx-auto max-w-xl text-center">
           <h1 className="text-3xl font-extrabold sm:text-5xl">
-            Discover Amazing Restaurants.
+            Discover Amazing Restaurants,
             <strong className="font-extrabold text-red-700 sm:block">
               {" "}
               Share Your Favorites.{" "}
