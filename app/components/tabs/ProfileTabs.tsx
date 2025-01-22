@@ -2,22 +2,21 @@ import React from "react";
 import Link from "next/link";
 
 interface ProfileTabsProps {
-  username: string;
   selectedTab: 0 | 1;
 }
 
-const ProfileTabs: React.FC<ProfileTabsProps> = ({ username, selectedTab }) => {
+const ProfileTabs: React.FC<ProfileTabsProps> = ({ selectedTab }) => {
   return (
     <div role="tablist" className="tabs tabs-boxed">
       <Link
-        href={`/profile/${username}/favorites`}
+        href={`/profile/favorites`}
         role="tab"
         className={`tab ${selectedTab === 0 ? "tab-active" : ""}`}
       >
         Favorites
       </Link>
       <Link
-        href={`/profile/${username}/add`}
+        href={`/profile/add`}
         role="tab"
         className={`tab ${selectedTab === 1 ? "tab-active" : ""}`}
       >
