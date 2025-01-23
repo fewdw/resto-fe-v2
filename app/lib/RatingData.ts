@@ -27,3 +27,42 @@ export async function getRatings(username: string): Promise<any[]> {
     throw error;
   }
 }
+
+export async function addRating(
+  restaurantUsername: string,
+  tagName: string,
+  is_like: boolean
+) {
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/ratings`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        restaurantUsername,
+        tagName,
+        is_like,
+      }),
+    });
+
+    // Check if the response is not OK (4xx errors)
+    if (!response.ok) {
+      throw new Error(`Failed to send rating: ${response.statusText}`);
+    }
+
+    // If status is 200, we don't need to handle a response body
+    // Just return nothing or you can return a success flag if needed
+    if (response.status === 200) {
+      return;
+    }
+
+    // If you expect other responses with JSON, you can handle them here
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+}
