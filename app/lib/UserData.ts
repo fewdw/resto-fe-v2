@@ -24,11 +24,14 @@ export const fetchUserProfileById = async (
   username: string
 ): Promise<UserProfile | null> => {
   try {
-    const response = await fetch(`${BACKEND_URL}/api/user/profile${username}`, {
-      credentials: "include",
-    });
+    const response = await fetch(
+      `${BACKEND_URL}/api/user/profile/${username}`,
+      {
+        credentials: "include",
+      }
+    );
     if (!response.ok) {
-      return null;
+      throw new Error("User not found");
     }
     const data: UserProfile = await response.json();
 
@@ -85,6 +88,50 @@ export const getRestaurantsFavorite = async (
     const response = await fetch(`${BACKEND_URL}/api/favorites/${page}`, {
       credentials: "include",
     });
+    if (!response.ok) {
+      return null;
+    }
+    const data: Restaurant[] = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching restaurants:", error);
+    return null;
+  }
+};
+
+export const getRestaurantsAddedByUsername = async (
+  page: number,
+  username: string
+): Promise<Restaurant[] | null> => {
+  try {
+    const response = await fetch(
+      `${BACKEND_URL}/api/user/added/${username}/${page}`,
+      {
+        credentials: "include",
+      }
+    );
+    if (!response.ok) {
+      return null;
+    }
+    const data: Restaurant[] = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching restaurants:", error);
+    return null;
+  }
+};
+
+export const getRestaurantsFavoriteByUsername = async (
+  page: number,
+  username: string
+): Promise<Restaurant[] | null> => {
+  try {
+    const response = await fetch(
+      `${BACKEND_URL}/api/favorites/${username}/${page}`,
+      {
+        credentials: "include",
+      }
+    );
     if (!response.ok) {
       return null;
     }

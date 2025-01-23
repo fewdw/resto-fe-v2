@@ -1,33 +1,24 @@
-import {
-  fetchUserProfile,
-  getUserFromStorage,
-  storeUserInStorage,
-} from "@/app/lib/UserData";
+import { useState, useEffect } from "react";
+import { fetchUserProfileById } from "@/app/lib/UserData";
 import { UserProfile } from "@/app/types/user";
-import { BACKEND_URL, FRONTEND_URL } from "@/config";
-import React, { useEffect, useState } from "react";
+import { FRONTEND_URL } from "@/config";
+import LoadingProfileSkeleton from "./LoadingProfileSkeleton";
 
-const ProfileDisplay = () => {
+interface ProfileByIdDisplayProps {
+  username: string;
+}
+
+const ProfileByUsername: React.FC<ProfileByIdDisplayProps> = ({ username }) => {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [tooltip, setTooltip] = useState("Copy?");
 
   useEffect(() => {
     const loadUser = async () => {
-      const storedUser = getUserFromStorage();
-
-      if (storedUser) {
-        setUser(storedUser);
-      } else {
-        const fetchedUser = await fetchUserProfile();
-        if (fetchedUser) {
-          setUser(fetchedUser);
-          storeUserInStorage(fetchedUser);
-        }
-      }
+      const data = await fetchUserProfileById(username);
+      setUser(data);
     };
-
     loadUser();
-  }, []);
+  }, [username]);
 
   const copyToClipboard = () => {
     if (user) {
@@ -39,7 +30,9 @@ const ProfileDisplay = () => {
     }
   };
 
-  if (!user) return null;
+  if (!user) {
+    return <LoadingProfileSkeleton />;
+  }
 
   return (
     <div className="flex justify-center">
@@ -64,13 +57,10 @@ const ProfileDisplay = () => {
               </button>
             </div>
           </div>
-          <a className="btn btn-primary btn-sm" href={`${BACKEND_URL}/logout`}>
-            Logout
-          </a>
         </div>
       </div>
     </div>
   );
 };
 
-export default ProfileDisplay;
+export default ProfileByUsername;

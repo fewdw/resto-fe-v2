@@ -1,7 +1,7 @@
 "use client";
 import ProfileTabs from "@/app/components/tabs/ProfileTabs";
 import { usePathname } from "next/navigation";
-import ProfileDisplay from "../components/profile/ProfileDisplay";
+import ProfileDisplay from "../../components/profile/ProfileDisplay";
 
 export default function ProfileLayout({
   children,
