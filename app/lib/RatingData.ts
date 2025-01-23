@@ -49,7 +49,7 @@ export async function addRating(
 
     // Check if the response is not OK (4xx errors)
     if (!response.ok) {
-      throw new Error(`Failed to send rating: ${response.statusText}`);
+      // throw error
     }
 
     // If status is 200, we don't need to handle a response body

@@ -20,23 +20,27 @@ const Tag: React.FC<TagProps> = ({ emoji, name, votes, userVoted }) => {
   const [currentVotes, setCurrentVotes] = useState(votes);
   const { username } = useParams<{ username: string }>();
 
+  const [isSubmitting, setIsSubmitting] = useState(false); // Track if the user is in the middle of submitting a rating
+
   const badgeClass = isVoted
     ? "inline-flex items-center space-x-2 bg-blue-500 text-white rounded-full px-3 py-2 text-sm md:text-base"
     : "inline-flex items-center space-x-2 bg-gray-200 text-gray-700 rounded-full px-3 py-2 text-sm md:text-base";
 
   const handleRating = async () => {
-    const newVotes = isVoted ? currentVotes - 1 : currentVotes + 1;
+    if (isSubmitting) return; // Prevent submitting if already in progress
 
+    setIsSubmitting(true); // Set submitting to true when user clicks
+    const newVotes = isVoted ? currentVotes - 1 : currentVotes + 1;
     setIsVoted(!isVoted);
     setCurrentVotes(newVotes);
 
     try {
+      // Call backend to handle the rating logic
       await addRating(username, name, !isVoted);
     } catch (error) {
       console.error("Error updating rating:", error);
-
-      setIsVoted(isVoted);
-      setCurrentVotes(votes);
+    } finally {
+      setIsSubmitting(false); // Re-enable button once request completes
     }
   };
 
@@ -47,6 +51,11 @@ const Tag: React.FC<TagProps> = ({ emoji, name, votes, userVoted }) => {
       <span className="text-lg">{emoji}</span>
       <span>{name}</span>
       <span className="font-bold">{formattedVotes}</span>
+
+      {/* Show loader when submitting */}
+      {isSubmitting && (
+        <span className="loading loading-spinner loading-xs ml-2"></span>
+      )}
     </div>
   );
 };
