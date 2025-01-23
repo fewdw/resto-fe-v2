@@ -1,5 +1,10 @@
-import { fetchUserProfile } from "@/app/lib/UserData";
+import {
+  fetchUserProfile,
+  getUserFromStorage,
+  storeUserInStorage,
+} from "@/app/lib/UserData";
 import { UserProfile } from "@/app/types/user";
+import { FRONTEND_URL } from "@/config";
 import React, { useEffect, useState } from "react";
 
 const ProfileDisplay = () => {
@@ -7,13 +12,31 @@ const ProfileDisplay = () => {
   const [tooltip, setTooltip] = useState("Copy?");
 
   useEffect(() => {
-    (async () => setUser(await fetchUserProfile()))();
+    const loadUser = async () => {
+      const storedUser = getUserFromStorage();
+
+      if (storedUser) {
+        setUser(storedUser);
+      } else {
+        const fetchedUser = await fetchUserProfile();
+        if (fetchedUser) {
+          setUser(fetchedUser);
+          storeUserInStorage(fetchedUser);
+        }
+      }
+    };
+
+    loadUser();
   }, []);
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText("hello");
-    setTooltip("Copied!");
-    setTimeout(() => setTooltip("Copy?"), 500);
+    if (user) {
+      navigator.clipboard.writeText(
+        `${FRONTEND_URL}/profile/${user.username}/favorites`
+      );
+      setTooltip("Copied!");
+      setTimeout(() => setTooltip("Copy?"), 500);
+    }
   };
 
   if (!user) return null;
