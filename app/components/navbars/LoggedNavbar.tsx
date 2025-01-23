@@ -31,7 +31,7 @@ const LoggedNavbar: React.FC<LoggedNavbarProps> = ({ profilePic }) => {
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
           >
             <li>
-              <a>
+              <Link href="/add-restaurant">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -47,10 +47,10 @@ const LoggedNavbar: React.FC<LoggedNavbarProps> = ({ profilePic }) => {
                   />
                 </svg>
                 Add restaurant
-              </a>
+              </Link>
             </li>
             <li>
-              <a>
+              <Link href="/search">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -66,10 +66,10 @@ const LoggedNavbar: React.FC<LoggedNavbarProps> = ({ profilePic }) => {
                   />
                 </svg>
                 Search
-              </a>
+              </Link>
             </li>
             <li>
-              <a>
+              <Link href="/new">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -85,10 +85,10 @@ const LoggedNavbar: React.FC<LoggedNavbarProps> = ({ profilePic }) => {
                   />
                 </svg>
                 New
-              </a>
+              </Link>
             </li>
             <li>
-              <a>
+              <Link href="/popular">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -104,7 +104,7 @@ const LoggedNavbar: React.FC<LoggedNavbarProps> = ({ profilePic }) => {
                   />
                 </svg>
                 Popular
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

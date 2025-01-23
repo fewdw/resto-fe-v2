@@ -1,7 +1,13 @@
+"use client";
 import React from "react";
+import AddRestaurantPage from "../components/add-restaurant/AddRestaurantPage";
 
 const page = () => {
-  return <div>add restaurant</div>;
+  return (
+    <div>
+      <AddRestaurantPage />
+    </div>
+  );
 };
 
 export default page;

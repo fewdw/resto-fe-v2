@@ -21,3 +21,20 @@ export type RestaurantData = {
   userInfoAddedBy: UserInfoAddedBy;
   likedByUser: boolean;
 };
+
+export type RestaurantSearchResult = {
+  placeId: string;
+  description: string;
+  username: string | null;
+  added: boolean;
+  likedByUser: boolean;
+};
+
+export type AddRestaurantResponse = {
+  restaurantImage: string;
+  restaurantName: string;
+  restaurantUsername: string;
+  restaurantAddress: string;
+  ratings: [];
+  likedByUser: boolean;
+};
