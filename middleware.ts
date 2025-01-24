@@ -3,7 +3,8 @@ import type { NextRequest } from "next/server";
 import { isLoggedIn } from "./app/lib/AuthData";
 
 export async function middleware(request: NextRequest) {
-  const isUserLoggedIn = await isLoggedIn(request.headers.get("cookie") || "");
+  const cookiesString = request.headers.get("cookie") || "";
+  const isUserLoggedIn = await isLoggedIn(cookiesString);
   if (isUserLoggedIn) {
     return NextResponse.next();
   }
