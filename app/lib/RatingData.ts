@@ -11,6 +11,9 @@ export async function getRatings(username: string): Promise<any[]> {
     });
 
     if (!response.ok) {
+      if (response.status === 401) {
+        redirect("/sign-in");
+      }
       throw new Error(`Failed to fetch ratings for username: ${username}`);
     }
 
@@ -47,18 +50,12 @@ export async function addRating(
       }),
     });
 
-    // Check if the response is not OK (4xx errors)
     if (!response.ok) {
-      // throw error
+      throw new Error(`Failed to add rating. Status: ${response.status}`);
     }
-
-    // If status is 200, we don't need to handle a response body
-    // Just return nothing or you can return a success flag if needed
     if (response.status === 200) {
       return;
     }
-
-    // If you expect other responses with JSON, you can handle them here
     const responseData = await response.json();
     return responseData;
   } catch (error) {
