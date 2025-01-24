@@ -11,9 +11,6 @@ export async function getRatings(username: string): Promise<any[]> {
     });
 
     if (!response.ok) {
-      if (response.status === 401) {
-        redirect("/sign-in");
-      }
       throw new Error(`Failed to fetch ratings for username: ${username}`);
     }
 
