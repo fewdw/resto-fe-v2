@@ -38,3 +38,24 @@ export type AddRestaurantResponse = {
   ratings: [];
   likedByUser: boolean;
 };
+
+interface Tag {
+  id: number;
+  name: string;
+  type: string;
+  emoji: string;
+}
+
+interface Rating {
+  tag: Tag;
+  votes: number;
+}
+
+export interface Restaurant {
+  restaurantImage: string;
+  restaurantName: string;
+  restaurantUsername: string;
+  restaurantAddress: string;
+  ratings: Rating[];
+  likedByUser: boolean;
+}

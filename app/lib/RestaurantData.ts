@@ -4,8 +4,8 @@ import {
   RestaurantData,
   RestaurantSearchResult,
 } from "../types/restaurant";
+import { Restaurant } from "../types/user";
 
-//RestaurantData.ts
 export async function getRestaurantByUsername(
   username: string
 ): Promise<RestaurantData> {
@@ -70,6 +70,71 @@ export async function addRestaurant(
     return data;
   } catch (error) {
     console.error("Error adding restaurant:", error);
+    throw error;
+  }
+}
+
+async function fetchRestaurants(
+  endpoint: string,
+  page: number
+): Promise<Restaurant[]> {
+  const url = `${BACKEND_URL}/api/restaurants/${endpoint}/${page}`;
+
+  try {
+    const response = await fetch(url, {
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch restaurants: ${response.statusText}`);
+    }
+
+    const data: Restaurant[] = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function getRestaurantsByPopular(
+  page: number
+): Promise<Restaurant[]> {
+  return fetchRestaurants("popular", page);
+}
+
+export async function getRestaurantsByNew(page: number): Promise<Restaurant[]> {
+  return fetchRestaurants("new", page);
+}
+
+export async function searchRestaurantThumbnails(
+  page: number,
+  body: {
+    searchBar: string;
+    strictTags: boolean;
+    tags: { name: string; type: string; emoji: string }[];
+  }
+): Promise<Restaurant[]> {
+  const url = `${BACKEND_URL}/api/restaurants/thumbnails-search/${page}`;
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    }
+
+    const data: Restaurant[] = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch restaurant thumbnails:", error);
     throw error;
   }
 }

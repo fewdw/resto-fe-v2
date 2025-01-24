@@ -36,13 +36,13 @@ const AddRestaurantPage: React.FC = () => {
           placeholder="Type here"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleKeyDown} // Trigger search on Enter key press
+          onKeyDown={handleKeyDown}
           className="input input-bordered w-full max-w-xs"
         />
         <button
           onClick={handleSearch}
           className="btn btn-primary flex items-center justify-center"
-          disabled={isSearching} // Disable the button while searching
+          disabled={isSearching}
         >
           {isSearching ? (
             <span className="loading loading-spinner loading-xs"></span>

@@ -1,6 +1,6 @@
-// components/card/Thumbnail.tsx
+import { favoriteRestaurant } from "@/app/lib/FavoriteData";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
 interface Rating {
   tag: {
@@ -18,6 +18,7 @@ interface Restaurant {
   restaurantUsername: string;
   restaurantAddress: string;
   ratings: Rating[];
+  likedByUser: boolean;
 }
 
 interface ThumbnailProps {
@@ -25,7 +26,28 @@ interface ThumbnailProps {
 }
 
 const Thumbnail: React.FC<ThumbnailProps> = ({ restaurant }) => {
+  const [isFavoriteLoading, setIsFavoriteLoading] = useState(false);
+  const [currentRestaurant, setCurrentRestaurant] = useState(restaurant);
+
   const topTags = restaurant.ratings.sort((a, b) => b.votes - a.votes);
+
+  const handleFavoriteToggle = async () => {
+    try {
+      setIsFavoriteLoading(true);
+      await favoriteRestaurant({
+        isFavorite: !currentRestaurant.likedByUser,
+        restaurantUsername: currentRestaurant.restaurantUsername,
+      });
+      setCurrentRestaurant((prev) => ({
+        ...prev,
+        likedByUser: !prev.likedByUser,
+      }));
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+    } finally {
+      setIsFavoriteLoading(false);
+    }
+  };
 
   return (
     <div className="w-full p-3 bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 ease-in-out transform">
@@ -64,6 +86,23 @@ const Thumbnail: React.FC<ThumbnailProps> = ({ restaurant }) => {
           </div>
         </div>
       </Link>
+
+      {/* Favorite Button */}
+      <div className="absolute top-3 right-3">
+        <button
+          className="text-xl"
+          onClick={handleFavoriteToggle}
+          disabled={isFavoriteLoading}
+        >
+          {isFavoriteLoading ? (
+            <span className="loading loading-spinner loading-xs"></span>
+          ) : currentRestaurant.likedByUser ? (
+            "❤️"
+          ) : (
+            "🖤"
+          )}
+        </button>
+      </div>
     </div>
   );
 };

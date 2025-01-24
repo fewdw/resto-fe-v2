@@ -1,3 +1,4 @@
+"use client";
 import Info from "./components/landing-page/Info";
 import LandingPageHero from "./components/landing-page/LandingPageHero";
 
