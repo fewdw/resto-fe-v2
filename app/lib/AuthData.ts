@@ -7,11 +7,7 @@ export async function isLoggedIn(cookies: string): Promise<boolean> {
         Cookie: cookies,
       },
       method: "GET",
-      credentials: "include",
     });
-    console.log("Response status:", response);
-
-    console.log("Response status:", response.status);
     return response.status === 200;
   } catch (error) {
     console.error("Error occurred during fetch:", error);
