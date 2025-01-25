@@ -27,14 +27,12 @@ const RestaurantTags: React.FC<RestaurantTagsProps> = ({ tags }) => {
   };
 
   return (
-    <div className="p-4 sm:p-6 md:p-8">
+    <div className="max-w-screen-lg mx-auto p-4 sm:p-6 md:p-8">
       {Object.keys(groupedTags).map((category) => (
         <div key={category} className="mb-8">
-          {/* Category Header */}
           <h3 className="font-bold text-2xl text-gray-800 mb-4 border-b pb-2">
             {formatCategoryName(category)}
           </h3>
-          {/* Tag Cloud */}
           <div className="flex flex-wrap gap-3">
             {groupedTags[category].map((tag: any) => (
               <div key={tag.id} className="cursor-pointer">

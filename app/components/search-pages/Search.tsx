@@ -8,12 +8,13 @@ import RestaurantDisplay from "../display/RestaurantDisplay";
 
 const Search: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [isStrictTags, setIsStrictTags] = useState<boolean>(false);
+  const [isStrictTags, setIsStrictTags] = useState<boolean>(true); // Default to Strict
   const [tags, setTags] = useState<Tag[]>([]);
   const [groupedTags, setGroupedTags] = useState<{ [key: string]: Tag[] }>({});
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [hasSearched, setHasSearched] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -33,6 +34,7 @@ const Search: React.FC = () => {
 
   const handleSearch = async () => {
     try {
+      setIsLoading(true);
       const results = await searchRestaurantThumbnails(0, {
         searchBar: searchTerm,
         strictTags: isStrictTags,
@@ -42,6 +44,8 @@ const Search: React.FC = () => {
       setHasSearched(true);
     } catch (error) {
       console.error("Search failed:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -58,78 +62,76 @@ const Search: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center space-x-4">
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Enter search term"
-          className="border p-2 rounded"
-        />
-        <div className="flex items-center">
+    <div>
+      <div className="space-y-6 p-4 max-w-4xl mx-auto">
+        {/* Search Input, Dropdown, and Button */}
+        <div className="flex flex-wrap items-center gap-4">
           <input
-            type="radio"
-            id="strictTagsFalse"
-            name="strictTags"
-            checked={isStrictTags === false}
-            onChange={() => setIsStrictTags(false)}
-            className="mr-2"
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Type here"
+            className="input input-bordered w-full max-w-lg"
+            disabled
           />
-          <label htmlFor="strictTagsFalse" className="mr-4">
-            Loose Tags
-          </label>
-          <input
-            type="radio"
-            id="strictTagsTrue"
-            name="strictTags"
-            checked={isStrictTags === true}
-            onChange={() => setIsStrictTags(true)}
-            className="mr-2"
-          />
-          <label htmlFor="strictTagsTrue">Strict Tags</label>
+          <select
+            className="select select-bordered w-full max-w-[10rem]"
+            value={isStrictTags.toString()}
+            onChange={(e) => setIsStrictTags(e.target.value === "true")}
+          >
+            <option value="true">Strict</option>
+            <option value="false">Non-strict</option>
+          </select>
+          <button
+            onClick={handleSearch}
+            className="btn btn-primary flex items-center"
+          >
+            {isLoading && (
+              <span className="loading loading-spinner loading-xs mr-2"></span>
+            )}
+            Search
+          </button>
         </div>
-        <button
-          onClick={handleSearch}
-          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-        >
-          Search
-        </button>
-      </div>
-      {Object.entries(groupedTags).map(([type, typeTags]) => (
-        <div key={type} className="mb-4">
-          <h3 className="text-lg font-semibold mb-2">
-            {formatTypeHeader(type)}
-          </h3>
-          <div className="flex flex-wrap gap-2">
-            {typeTags.map((tag) => (
-              <div
-                key={tag.id}
-                onClick={() => toggleTagSelection(tag)}
-                className={`flex items-center px-3 py-1 rounded-full cursor-pointer ${
-                  selectedTags.some((t) => t.id === tag.id)
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-100"
-                }`}
-              >
-                <span className="mr-2">{tag.emoji}</span>
-                <span>{tag.name}</span>
-              </div>
-            ))}
+
+        {/* Tags Display */}
+        {Object.entries(groupedTags).map(([type, typeTags]) => (
+          <div key={type} className="mb-6">
+            <h3 className="text-lg font-semibold mb-2">
+              {formatTypeHeader(type)}
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {typeTags.map((tag) => (
+                <div
+                  key={tag.id}
+                  onClick={() => toggleTagSelection(tag)}
+                  className={`flex items-center px-4 py-2 rounded-full cursor-pointer transition-colors ${
+                    selectedTags.some((t) => t.id === tag.id)
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-100 hover:bg-gray-200"
+                  }`}
+                >
+                  <span className="mr-2">{tag.emoji}</span>
+                  <span>{tag.name}</span>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
-      {restaurants.length > 0 ? (
-        <RestaurantDisplay restaurants={restaurants} />
-      ) : hasSearched ? (
-        <div className="text-center text-gray-500 py-8">
-          No restaurants found. Try adjusting your search.
-        </div>
-      ) : (
-        <div className="text-center text-gray-500 py-8">
-          Select your tags and search to find restaurants
-        </div>
-      )}
+        ))}
+      </div>
+      {/* Restaurants Display */}
+      <div className="pt-8">
+        {restaurants.length > 0 ? (
+          <RestaurantDisplay restaurants={restaurants} />
+        ) : hasSearched ? (
+          <div className="text-center text-gray-500 py-8">
+            No restaurants found. Try adjusting your search.
+          </div>
+        ) : (
+          <div className="text-center text-gray-500 py-8">
+            Select your tags and search to find restaurants
+          </div>
+        )}
+      </div>
     </div>
   );
 };

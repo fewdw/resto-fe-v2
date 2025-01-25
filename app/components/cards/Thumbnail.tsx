@@ -69,7 +69,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({ restaurant }) => {
             <h2 className="text-lg font-semibold text-center text-gray-800 hover:text-gray-600 transition-colors duration-300">
               {restaurant.restaurantName}
             </h2>
-            <p className="text-sm text-left text-gray-600">
+            <p className="text-sm text-let text-gray-600">
               {restaurant.restaurantAddress}
             </p>
           </div>
@@ -87,7 +87,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({ restaurant }) => {
         ))}
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex justify-between items-center">
         <button
           className={`btn btn-circle ${
             currentRestaurant.likedByUser ? "btn-error" : "btn-outline"
@@ -114,6 +114,15 @@ const Thumbnail: React.FC<ThumbnailProps> = ({ restaurant }) => {
             </svg>
           )}
         </button>
+
+        {restaurant.restaurantUsername && (
+          <Link
+            href={`/restaurant/${restaurant.restaurantUsername}`}
+            className="btn btn-outline"
+          >
+            Visit Page
+          </Link>
+        )}
       </div>
     </div>
   );
