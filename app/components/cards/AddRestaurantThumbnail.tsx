@@ -1,33 +1,46 @@
+import { favoriteRestaurant } from "@/app/lib/FavoriteData";
 import Link from "next/link";
 import React, { useState } from "react";
-import { addRestaurant } from "@/app/lib/RestaurantData";
-import { favoriteRestaurant } from "@/app/lib/FavoriteData";
+import Tag from "./Tag";
 
-type RestaurantThumbnailProps = {
-  restaurant: {
-    placeId: string;
-    description: string;
-    username: string | null;
-    added: boolean;
-    likedByUser: boolean;
+interface Rating {
+  tag: {
+    id: number;
+    name: string;
+    type: string;
+    emoji: string;
   };
-};
+  votes: number;
+}
 
-const AddRestaurantThumbnail: React.FC<RestaurantThumbnailProps> = ({
-  restaurant,
-}) => {
+interface Restaurant {
+  restaurantImage: string;
+  restaurantName: string;
+  restaurantUsername: string;
+  restaurantAddress: string;
+  ratings: Rating[];
+  likedByUser: boolean;
+}
+
+interface ThumbnailProps {
+  restaurant: Restaurant;
+}
+
+const Thumbnail: React.FC<ThumbnailProps> = ({ restaurant }) => {
   const [isFavoriteLoading, setIsFavoriteLoading] = useState(false);
-  const [isAddLoading, setIsAddLoading] = useState(false);
   const [currentRestaurant, setCurrentRestaurant] = useState(restaurant);
+
+  const topTags = restaurant.ratings
+    .sort((a, b) => b.votes - a.votes)
+    .slice(0, 8); // Limit to top 8 tags
 
   const handleFavoriteToggle = async () => {
     try {
       setIsFavoriteLoading(true);
       await favoriteRestaurant({
         isFavorite: !currentRestaurant.likedByUser,
-        restaurantUsername: currentRestaurant.username!,
+        restaurantUsername: currentRestaurant.restaurantUsername,
       });
-      // Update likedByUser status
       setCurrentRestaurant((prev) => ({
         ...prev,
         likedByUser: !prev.likedByUser,
@@ -39,83 +52,71 @@ const AddRestaurantThumbnail: React.FC<RestaurantThumbnailProps> = ({
     }
   };
 
-  const handleAddRestaurant = async () => {
-    try {
-      setIsAddLoading(true);
-      const data = await addRestaurant(currentRestaurant.placeId);
-      // Update the restaurant to reflect "added" status
-      setCurrentRestaurant({
-        ...currentRestaurant,
-        added: true,
-        username: data.restaurantUsername,
-      });
-    } catch (error) {
-      console.error("Error adding restaurant:", error);
-    } finally {
-      setIsAddLoading(false);
-    }
-  };
-
   return (
-    <div className="border rounded-lg p-4 shadow hover:shadow-lg transition">
-      <h2 className="text-lg font-semibold">{currentRestaurant.description}</h2>
-
-      {/* Show "Added by you" or added by someone */}
-      {currentRestaurant.added && (
-        <p className="text-sm text-gray-500">
-          Added by:{" "}
-          {currentRestaurant.username
-            ? currentRestaurant.username === "you"
-              ? "You!"
-              : currentRestaurant.username
-            : "Unknown"}
-        </p>
-      )}
-
-      {currentRestaurant.added ? (
-        <div className="mt-2 flex gap-4">
-          {/* Favorite Button */}
-          <button
-            className="btn"
-            onClick={handleFavoriteToggle}
-            disabled={isFavoriteLoading}
-          >
-            {isFavoriteLoading ? (
-              <span className="loading loading-spinner loading-xs"></span>
-            ) : currentRestaurant.likedByUser ? (
-              "❤️ Favorite"
+    <div className="flex flex-col justify-between border rounded-lg p-4 shadow-md hover:shadow-lg transition bg-base-100">
+      <Link href={`/restaurant/${restaurant.restaurantUsername}`}>
+        <div>
+          <figure className="relative w-full h-40 rounded-lg overflow-hidden mb-3">
+            {restaurant.restaurantImage ? (
+              <img
+                src={restaurant.restaurantImage}
+                alt={restaurant.restaurantName}
+                className="w-full h-full object-cover transition-transform duration-500 ease-in-out"
+              />
             ) : (
-              "🖤 Favorite"
+              <div className="h-full w-full rounded-lg bg-gray-200 animate-pulse"></div>
             )}
-          </button>
-          {/* Visit Page Button */}
-          {currentRestaurant.username && (
-            <Link
-              href={`/restaurant/${currentRestaurant.username}`}
-              className="btn btn-outline"
+          </figure>
+          <h2 className="text-lg font-semibold mb-2 text-center">
+            {restaurant.restaurantName}
+          </h2>
+          <p className="text-sm text-gray-600 text-center mb-3">
+            {restaurant.restaurantAddress}
+          </p>
+        </div>
+      </Link>
+
+      <div className="grid grid-cols-4 gap-2 mb-3">
+        {topTags.map((rating) => (
+          <Tag
+            key={rating.tag.id}
+            emoji={rating.tag.emoji}
+            name={rating.tag.name}
+            votes={rating.votes}
+          />
+        ))}
+      </div>
+
+      <div className="flex justify-center">
+        <button
+          className={`btn btn-circle ${
+            currentRestaurant.likedByUser ? "btn-error" : "btn-outline"
+          }`}
+          onClick={handleFavoriteToggle}
+          disabled={isFavoriteLoading}
+        >
+          {isFavoriteLoading ? (
+            <span className="loading loading-spinner"></span>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill={currentRestaurant.likedByUser ? "currentColor" : "none"}
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              Visit Page
-            </Link>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
+            </svg>
           )}
-        </div>
-      ) : (
-        <div className="mt-2">
-          {/* Add Button */}
-          <button
-            className="btn btn-primary"
-            onClick={handleAddRestaurant}
-            disabled={isAddLoading}
-          >
-            {isAddLoading ? (
-              <span className="loading loading-spinner loading-xs"></span>
-            ) : (
-              "Add"
-            )}
-          </button>
-        </div>
-      )}
+        </button>
+      </div>
     </div>
   );
 };
 
-export default AddRestaurantThumbnail;
+export default Thumbnail;

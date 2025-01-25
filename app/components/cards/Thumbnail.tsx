@@ -1,6 +1,7 @@
 import { favoriteRestaurant } from "@/app/lib/FavoriteData";
 import Link from "next/link";
 import React, { useState } from "react";
+import Tag from "./Tag";
 
 interface Rating {
   tag: {
@@ -50,7 +51,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({ restaurant }) => {
   };
 
   return (
-    <div className="w-full p-3 bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 ease-in-out transform">
+    <div className="flex flex-col justify-between border rounded-lg p-4 shadow-md hover:shadow-lg transition bg-base-100">
       <Link href={`/restaurant/${restaurant.restaurantUsername}`}>
         <div className="relative">
           <figure className="relative w-full h-48 rounded-lg overflow-hidden">
@@ -58,48 +59,59 @@ const Thumbnail: React.FC<ThumbnailProps> = ({ restaurant }) => {
               <img
                 src={restaurant.restaurantImage}
                 alt={restaurant.restaurantName}
-                className="w-full h-full object-cover rounded-lg transition-transform duration-500 ease-in-out"
+                className="w-full h-full object-cover transition-transform duration-500 ease-in-out hover:scale-105"
               />
             ) : (
               <div className="h-full w-full rounded-lg bg-gray-200 animate-pulse"></div>
             )}
           </figure>
-          <div className="p-3 space-y-2">
-            <h2 className="text-xl font-semibold text-gray-800 hover:text-gray-600 transition-colors duration-300">
+          <div className="py-3">
+            <h2 className="text-lg font-semibold text-center text-gray-800 hover:text-gray-600 transition-colors duration-300">
               {restaurant.restaurantName}
             </h2>
-            <p className="text-sm sm:text-base text-gray-600">
+            <p className="text-sm text-left text-gray-600">
               {restaurant.restaurantAddress}
             </p>
-            <div className="flex flex-wrap gap-1 mt-2">
-              {topTags.map((rating) => (
-                <div
-                  key={rating.tag.id}
-                  className="inline-flex items-center space-x-1 bg-gray-100 text-gray-700 rounded-full px-3 py-1 text-xs md:text-sm shadow-sm hover:bg-gray-200 transition duration-300"
-                >
-                  <span className="text-lg">{rating.tag.emoji}</span>
-                  <span className="hidden md:inline">{rating.tag.name}</span>
-                  <span className="font-bold">{rating.votes}</span>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </Link>
 
-      {/* Favorite Button */}
-      <div className="absolute top-3 right-3">
+      <div className="flex flex-wrap gap-2 my-3">
+        {topTags.map((rating) => (
+          <Tag
+            key={rating.tag.id}
+            emoji={rating.tag.emoji}
+            name={rating.tag.name}
+            votes={rating.votes}
+          />
+        ))}
+      </div>
+
+      <div className="flex justify-end">
         <button
-          className="text-xl"
+          className={`btn btn-circle ${
+            currentRestaurant.likedByUser ? "btn-error" : "btn-outline"
+          }`}
           onClick={handleFavoriteToggle}
           disabled={isFavoriteLoading}
         >
           {isFavoriteLoading ? (
-            <span className="loading loading-spinner loading-xs"></span>
-          ) : currentRestaurant.likedByUser ? (
-            "❤️"
+            <span className="loading loading-spinner"></span>
           ) : (
-            "🖤"
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill={currentRestaurant.likedByUser ? "currentColor" : "none"}
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
+            </svg>
           )}
         </button>
       </div>

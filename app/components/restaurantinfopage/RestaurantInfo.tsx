@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import RestaurantTime from "./RestaurantTime";
 import Link from "next/link";
+import { favoriteRestaurant } from "@/app/lib/FavoriteData";
 
 type RestaurantInfoProps = {
   data: {
@@ -16,10 +17,33 @@ type RestaurantInfoProps = {
       username: string;
       profilePictureUrl: string;
     };
+    restaurantUsername: string;
+    likedByUser: boolean;
   };
 };
 
 const RestaurantInfo: React.FC<RestaurantInfoProps> = ({ data }) => {
+  const [isLiked, setIsLiked] = useState(data.likedByUser);
+  const [loading, setLoading] = useState(false);
+
+  const toggleLike = async () => {
+    if (loading) return;
+    setLoading(true);
+
+    try {
+      await favoriteRestaurant({
+        isFavorite: !isLiked,
+        restaurantUsername: data.restaurantUsername,
+      });
+      setIsLiked(!isLiked);
+    } catch (error) {
+      console.error("Failed to toggle like:", error);
+      alert("An error occurred while updating the favorite status.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="max-w-2xl mx-auto p-6 rounded-lg">
       {/* Image */}
@@ -42,8 +66,13 @@ const RestaurantInfo: React.FC<RestaurantInfoProps> = ({ data }) => {
       )}
 
       {/* Added By */}
+      <p className="mt-4 text-sm font-semibold text-gray-700">
+        Added by {data.addedBy.name}
+      </p>
+
+      {/* Profile */}
       <Link href={`/profile/${data.addedBy.username}/favorites`}>
-        <div className="bg-gray-50 p-4 rounded-lg mt-6 flex items-center">
+        <div className="bg-gray-50 p-4 rounded-lg mt-2 flex items-center">
           <img
             src={data.addedBy.profilePictureUrl}
             alt={data.addedBy.name}
@@ -51,7 +80,7 @@ const RestaurantInfo: React.FC<RestaurantInfoProps> = ({ data }) => {
           />
           <div className="ml-4">
             <p className="text-sm font-semibold text-gray-700">
-              Added by {data.addedBy.name}
+              {data.addedBy.name}
             </p>
             <p className="text-sm text-gray-500">@{data.addedBy.username}</p>
           </div>
@@ -86,6 +115,24 @@ const RestaurantInfo: React.FC<RestaurantInfoProps> = ({ data }) => {
             Call
           </a>
         )}
+      </div>
+
+      {/* Liked Button */}
+      <div className="mt-4 flex justify-center">
+        <button
+          onClick={toggleLike}
+          disabled={loading}
+          className={`px-4 py-2 rounded-lg shadow transition flex items-center gap-2 ${
+            isLiked
+              ? "bg-green-600 text-white hover:bg-green-700"
+              : "bg-gray-400 text-white hover:bg-gray-500"
+          } ${loading ? "btn-disabled" : ""}`}
+        >
+          {loading && (
+            <span className="loading loading-spinner loading-xs"></span>
+          )}
+          {isLiked ? "Liked" : "Not Liked"}
+        </button>
       </div>
 
       {/* Opening Hours */}

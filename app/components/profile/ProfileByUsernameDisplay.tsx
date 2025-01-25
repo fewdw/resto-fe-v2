@@ -26,7 +26,7 @@ const ProfileByUsername: React.FC<ProfileByIdDisplayProps> = ({ username }) => {
         `${FRONTEND_URL}/profile/${user.username}/favorites`
       );
       setTooltip("Copied!");
-      setTimeout(() => setTooltip("Copy?"), 500);
+      setTimeout(() => setTooltip("Copy?"), 300);
     }
   };
 
@@ -47,14 +47,13 @@ const ProfileByUsername: React.FC<ProfileByIdDisplayProps> = ({ username }) => {
         <div className="card-body items-center text-center">
           <h2 className="card-title text-xl font-bold">{user.name}</h2>
           <div className="flex items-center space-x-2">
-            <p className="text-gray-500">@{user.username}</p>
-            <div className="tooltip tooltip-top" data-tip={tooltip}>
-              <button
-                className="btn btn-sm btn-primary"
+            <div className="tooltip" data-tip={tooltip}>
+              <p
+                className="text-gray-500 cursor-pointer hover:text-blue-600 hover:bg-blue-100 px-2 py-1 rounded"
                 onClick={copyToClipboard}
               >
-                Copy
-              </button>
+                @{user.username}
+              </p>
             </div>
           </div>
         </div>

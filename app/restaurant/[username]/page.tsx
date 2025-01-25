@@ -21,6 +21,8 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
       username: string;
       profilePictureUrl: string;
     };
+    restaurantUsername: string;
+    likedByUser: boolean;
   }>(null);
   const [tags, setTags] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -54,6 +56,8 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
             username: data.userInfoAddedBy.username,
             profilePictureUrl: data.userInfoAddedBy.profilePictureUrl,
           },
+          restaurantUsername: data.restaurantApiInfo.restaurantUsername,
+          likedByUser: data.likedByUser,
         });
 
         // Fetching tags (ratings) for the restaurant
