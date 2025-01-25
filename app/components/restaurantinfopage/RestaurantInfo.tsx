@@ -45,108 +45,111 @@ const RestaurantInfo: React.FC<RestaurantInfoProps> = ({ data }) => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 rounded-lg">
+    <div className="max-w-2xl mx-auto p-0 sm:p-4 rounded-lg bg-white shadow-md overflow-hidden">
       {/* Image */}
       <img
         src={data.imageUrl || "https://placehold.co/600x400"}
         alt={data.restaurantName}
-        className="w-full h-64 object-cover rounded-t-lg"
+        className="w-full h-48 sm:h-64 object-cover"
       />
 
-      {/* Name */}
-      <h2 className="text-3xl font-bold mt-4 text-gray-800 text-left">
-        {data.restaurantName}
-      </h2>
+      {/* Content */}
+      <div className="p-4 sm:p-6">
+        {/* Name */}
+        <h2 className="text-2xl sm:text-3xl font-bold mt-2 text-gray-800 w-full text-left break-words">
+          {data.restaurantName}
+        </h2>
 
-      {/* Address */}
-      {data.restaurantAddress && (
-        <p className="text-gray-600 mt-2 text-left font-light">
-          {data.restaurantAddress}
-        </p>
-      )}
+        {/* Address */}
+        {data.restaurantAddress && (
+          <p className="text-gray-600 mt-2 text-left font-light text-sm sm:text-base break-words">
+            {data.restaurantAddress}
+          </p>
+        )}
 
-      {/* Added By */}
-      <p className="mt-4 text-sm font-semibold text-gray-700">Added by</p>
-
-      {/* Profile */}
-      <Link href={`/profile/${data.addedBy.username}/favorites`}>
-        <div className="bg-gray-50 p-4 rounded-lg mt-2 flex items-center">
+        {/* Added By */}
+        <div className="mt-4 bg-gray-100 p-4 rounded-lg -mx-4 sm:-mx-6 flex items-center space-x-4">
           <img
             src={data.addedBy.profilePictureUrl}
             alt={data.addedBy.name}
-            className="w-12 h-12 rounded-full shadow-md"
+            className="w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-md"
           />
-          <div className="ml-4">
+          <div>
             <p className="text-sm font-semibold text-gray-700">
               {data.addedBy.name}
             </p>
-            <p className="text-sm text-gray-500">@{data.addedBy.username}</p>
+            <p className="text-xs sm:text-sm text-gray-500">
+              @{data.addedBy.username}
+            </p>
           </div>
         </div>
-      </Link>
 
-      {/* Buttons */}
-      <div className="flex space-x-4 mt-6 justify-center items-center">
-        <a
-          href={data.googleMapUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn btn-primary"
-        >
-          Open in Maps
-        </a>
-        {data.website && (
+        {/* Buttons */}
+        <div className="flex flex-col sm:flex-row sm:space-x-4 mt-6 justify-center items-stretch sm:items-center space-y-3 sm:space-y-0">
           <a
-            href={data.website}
+            href={data.googleMapUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-primary"
+            className="btn btn-primary w-full sm:w-auto text-center"
           >
-            Open Website
+            Open in Maps
           </a>
-        )}
-        {data.phoneNumber && (
-          <a href={`tel:${data.phoneNumber}`} className="btn btn-primary">
-            Call
-          </a>
-        )}
-
-        {/* Liked Button */}
-        <button
-          onClick={toggleLike}
-          disabled={loading}
-          className="btn btn-primary flex items-center space-x-2"
-        >
-          {loading ? (
-            <span className="loading loading-spinner"></span>
-          ) : (
-            <>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill={isLiked ? "currentColor" : "none"}
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                />
-              </svg>
-              <span>{isLiked ? "Liked" : "Not Liked"}</span>
-            </>
+          {data.website && (
+            <a
+              href={data.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary w-full sm:w-auto text-center"
+            >
+              Open Website
+            </a>
           )}
-        </button>
-      </div>
+          {data.phoneNumber && (
+            <a
+              href={`tel:${data.phoneNumber}`}
+              className="btn btn-primary w-full sm:w-auto text-center"
+            >
+              Call
+            </a>
+          )}
 
-      {/* Opening Hours */}
-      {data.weekdayText && data.weekdayText.length > 0 && (
-        <div className="mt-6">
-          <RestaurantTime weekdayText={data.weekdayText} />
+          {/* Like Button */}
+          <button
+            onClick={toggleLike}
+            disabled={loading}
+            className="btn btn-primary flex justify-center items-center space-x-2 w-full sm:w-auto"
+          >
+            {loading ? (
+              <span className="loading loading-spinner"></span>
+            ) : (
+              <>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill={isLiked ? "currentColor" : "none"}
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  />
+                </svg>
+                <span>{isLiked ? "Liked" : "Not Liked"}</span>
+              </>
+            )}
+          </button>
         </div>
-      )}
+
+        {/* Opening Hours */}
+        {data.weekdayText && data.weekdayText.length > 0 && (
+          <div className="mt-6">
+            <RestaurantTime weekdayText={data.weekdayText} />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
