@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import RestaurantTime from "./RestaurantTime";
 import { favoriteRestaurant } from "@/app/lib/FavoriteData";
+import Link from "next/link";
 
 type RestaurantInfoProps = {
   data: {
@@ -67,21 +68,20 @@ const RestaurantInfo: React.FC<RestaurantInfoProps> = ({ data }) => {
         )}
 
         {/* Added By */}
-        <div className="mt-4 bg-gray-100 p-4 rounded-lg -mx-4 sm:-mx-6 flex items-center space-x-4">
-          <img
-            src={data.addedBy.profilePictureUrl}
-            alt={data.addedBy.name}
-            className="w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-md"
-          />
-          <div>
-            <p className="text-sm font-semibold text-gray-700">
-              {data.addedBy.name}
-            </p>
-            <p className="text-xs sm:text-sm text-gray-500">
-              @{data.addedBy.username}
-            </p>
+        <Link href={`/profile/${data.addedBy.username}/favorites`}>
+          <div className="mt-4 bg-gray-100 p-4 rounded-lg -mx-4 sm:-mx-6 flex items-center space-x-4">
+            <img
+              src={data.addedBy.profilePictureUrl}
+              alt={data.addedBy.name}
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-md"
+            />
+            <div>
+              <p className="text-sm font-semibold text-gray-700">
+                {data.addedBy.name}
+              </p>
+            </div>
           </div>
-        </div>
+        </Link>
 
         {/* Buttons */}
         <div className="flex flex-row items-center justify-center space-x-2 mt-6 w-full">

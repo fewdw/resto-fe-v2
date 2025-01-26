@@ -51,7 +51,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({ restaurant }) => {
   };
 
   return (
-    <div className="flex flex-col justify-between border rounded-lg p-4 shadow-md hover:shadow-lg transition bg-base-100">
+    <div className="flex flex-col justify-between rounded-lg p-4 shadow-md hover:shadow-lg transition bg-base-100">
       <Link href={`/restaurant/${restaurant.restaurantUsername}`}>
         <div className="relative">
           <figure className="relative w-full h-48 rounded-lg overflow-hidden">
@@ -114,15 +114,6 @@ const Thumbnail: React.FC<ThumbnailProps> = ({ restaurant }) => {
             </svg>
           )}
         </button>
-
-        {restaurant.restaurantUsername && (
-          <Link
-            href={`/restaurant/${restaurant.restaurantUsername}`}
-            className="btn btn-outline"
-          >
-            Visit Page
-          </Link>
-        )}
       </div>
     </div>
   );
