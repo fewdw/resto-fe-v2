@@ -88,7 +88,7 @@ const RestaurantInfo: React.FC<RestaurantInfoProps> = ({ data }) => {
           {/* Google Maps Button */}
           <a
             href={data.googleMapUrl}
-            target="_blank"
+            target=""
             rel="noopener noreferrer"
             className="btn btn-primary flex items-center justify-center p-2 w-12 h-12 sm:w-auto sm:h-auto sm:px-4 sm:py-2 rounded-full sm:rounded-md"
             title="Open in Maps"
