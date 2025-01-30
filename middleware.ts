@@ -5,10 +5,21 @@ import { isLoggedIn } from "./app/lib/AuthData";
 export async function middleware(request: NextRequest) {
   const cookiesString = request.headers.get("cookie") || "";
   const isUserLoggedIn = await isLoggedIn(cookiesString);
-  if (isUserLoggedIn) {
+  const { pathname } = request.nextUrl;
+
+  const loggedOutOnlyPaths = ["/sign-in", "/"];
+  if (loggedOutOnlyPaths.includes(pathname)) {
+    if (isUserLoggedIn) {
+      return NextResponse.redirect(new URL("/search", request.url));
+    }
     return NextResponse.next();
   }
-  return NextResponse.redirect(new URL("/", request.url));
+
+  if (!isUserLoggedIn) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
@@ -19,5 +30,7 @@ export const config = {
     "/add-restaurant",
     "/profile/:path*",
     "/restaurant/:path*",
+    "/sign-in",
+    "/",
   ],
 };
