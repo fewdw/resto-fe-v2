@@ -22,7 +22,7 @@ const SearchTabs: React.FC = () => {
   }, []);
 
   const getActiveClass = (path: string) =>
-    pathname === path ? "tab-active" : "";
+    pathname === path ? "bg-red-500 text-white" : "";
 
   if (!isMobileView) return null;
 

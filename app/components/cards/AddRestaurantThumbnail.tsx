@@ -101,7 +101,7 @@ const AddRestaurantThumbnail: React.FC<RestaurantThumbnailProps> = ({
           </div>
         ) : (
           <button
-            className="btn btn-primary w-full"
+            className="btn bg-red-600 hover:bg-red-700 w-full text-white"
             onClick={handleAddRestaurant}
             disabled={isAddLoading}
           >

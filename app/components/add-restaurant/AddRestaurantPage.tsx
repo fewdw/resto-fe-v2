@@ -47,7 +47,7 @@ const AddRestaurantPage: React.FC = () => {
           />
           <button
             onClick={handleSearch}
-            className="btn btn-primary w-32"
+            className="btn w-32 text-white bg-red-500 hover:bg-red-600"
             disabled={isSearching}
           >
             {isSearching ? (

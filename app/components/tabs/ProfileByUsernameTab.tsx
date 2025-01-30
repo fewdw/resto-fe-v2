@@ -15,14 +15,14 @@ const ProfileByUsernameTab: React.FC<ProfileTabsProps> = ({
       <Link
         href={`/profile/${username}/favorites`}
         role="tab"
-        className={`tab ${selectedTab === 0 ? "tab-active" : ""}`}
+        className={`tab ${selectedTab === 0 ? "bg-red-500 text-white" : ""}`}
       >
         Favorites
       </Link>
       <Link
         href={`/profile/${username}/add`}
         role="tab"
-        className={`tab ${selectedTab === 1 ? "tab-active" : ""}`}
+        className={`tab ${selectedTab === 1 ? "bg-red-500 text-white" : ""}`}
       >
         Add
       </Link>
