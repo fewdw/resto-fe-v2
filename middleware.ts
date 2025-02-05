@@ -3,26 +3,25 @@ import type { NextRequest } from "next/server";
 import { isLoggedIn } from "./app/lib/AuthData";
 
 export async function middleware(request: NextRequest) {
-  // Use the raw cookie header if needed by isLoggedIn.
-  const cookiesString = request.headers.get("cookie") || "";
-  const userLoggedIn = await isLoggedIn(cookiesString);
-  const { pathname, origin } = request.nextUrl;
+  const { pathname } = request.nextUrl;
+
+  // Get your cookie value. Replace "auth-token" with your actual cookie name.
+  const authToken = request.cookies.get("auth-token")?.value || "";
+
+  // Ensure that isLoggedIn is using this cookie string (or token) correctly.
+  const userLoggedIn = await isLoggedIn(authToken);
 
   const loggedOutOnlyPaths = ["/sign-in", "/"];
 
-  // If the user is logged in and is trying to access a logged-out only page,
-  // redirect them to /search.
   if (loggedOutOnlyPaths.includes(pathname)) {
     if (userLoggedIn) {
-      return NextResponse.redirect(new URL("/search", origin));
+      return NextResponse.redirect(new URL("/search", request.url));
     }
     return NextResponse.next();
   }
 
-  // If the user is not logged in and is trying to access any other protected route,
-  // redirect them to the homepage.
   if (!userLoggedIn) {
-    return NextResponse.redirect(new URL("/", origin));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();
@@ -39,5 +38,4 @@ export const config = {
     "/sign-in",
     "/",
   ],
-  runtime: "nodejs", // This forces the middleware to run using Node.js
 };
