@@ -9,10 +9,6 @@ export async function middleware(request: NextRequest) {
 
   const userLoggedIn = await isLoggedIn(authToken);
 
-  if (pathname === "/" || pathname === "/sign-in") {
-    return NextResponse.next();
-  }
-
   if (!userLoggedIn) {
     return NextResponse.redirect(new URL("/", request.url));
   }
