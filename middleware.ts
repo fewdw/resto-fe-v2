@@ -3,17 +3,12 @@ import type { NextRequest } from "next/server";
 import { isLoggedIn } from "./app/lib/AuthData";
 
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-
-  const authToken = request.cookies.get("JSESSIONID")?.value || "";
-
-  const userLoggedIn = await isLoggedIn(authToken);
-
-  if (!userLoggedIn) {
-    return NextResponse.redirect(new URL("/", request.url));
+  const cookiesString = request.headers.get("cookie") || "";
+  const isUserLoggedIn = await isLoggedIn(cookiesString);
+  if (isUserLoggedIn) {
+    return NextResponse.next();
   }
-
-  return NextResponse.next();
+  return NextResponse.redirect(new URL("/", request.url));
 }
 
 export const config = {
