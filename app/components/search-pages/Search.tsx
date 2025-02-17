@@ -7,8 +7,7 @@ import { Restaurant } from "@/app/types/user";
 import RestaurantDisplay from "../display/RestaurantDisplay";
 
 const Search: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [isStrictTags, setIsStrictTags] = useState<boolean>(true); // Default to Strict
+  const [isStrictTags, setIsStrictTags] = useState<boolean>(true);
   const [tags, setTags] = useState<Tag[]>([]);
   const [groupedTags, setGroupedTags] = useState<{ [key: string]: Tag[] }>({});
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
@@ -36,7 +35,6 @@ const Search: React.FC = () => {
     try {
       setIsLoading(true);
       const results = await searchRestaurantThumbnails(0, {
-        searchBar: searchTerm,
         strictTags: isStrictTags,
         tags: selectedTags,
       });
@@ -48,7 +46,6 @@ const Search: React.FC = () => {
       setIsLoading(false);
     }
   };
-
   const toggleTagSelection = (tag: Tag) => {
     setSelectedTags((prev) =>
       prev.some((t) => t.id === tag.id)
@@ -64,18 +61,10 @@ const Search: React.FC = () => {
   return (
     <div>
       <div className="space-y-6 p-4 max-w-4xl mx-auto">
-        {/* Search Input, Dropdown, and Button */}
+        {/* Search Controls */}
         <div className="flex flex-wrap items-center gap-4">
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Type here"
-            className="input input-bordered w-full max-w-lg"
-            disabled
-          />
           <select
-            className="select select-bordered w-full max-w-[10rem]"
+            className="select select-bordered w-full md:max-w-[10rem] flex-shrink-0"
             value={isStrictTags.toString()}
             onChange={(e) => setIsStrictTags(e.target.value === "true")}
           >
@@ -84,11 +73,25 @@ const Search: React.FC = () => {
           </select>
           <button
             onClick={handleSearch}
-            className="btn btn-primary flex items-center"
+            className="btn bg-red-500 text-white flex items-center w-full md:w-auto text-sm md:text-base px-4 py-2 md:px-6 md:py-3 flex-shrink-0 hover:bg-red-600"
           >
             {isLoading && (
               <span className="loading loading-spinner loading-xs mr-2"></span>
             )}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+              />
+            </svg>
             Search
           </button>
         </div>
@@ -118,13 +121,14 @@ const Search: React.FC = () => {
           </div>
         ))}
       </div>
+
       {/* Restaurants Display */}
       <div className="pt-8">
         {restaurants.length > 0 ? (
           <RestaurantDisplay restaurants={restaurants} />
         ) : hasSearched ? (
           <div className="text-center text-gray-500 py-8">
-            No restaurants found. Try adjusting your search.
+            No restaurants found. Try adjusting your tags.
           </div>
         ) : (
           <div className="text-center text-gray-500 py-8">

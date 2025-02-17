@@ -110,7 +110,6 @@ export async function getRestaurantsByNew(page: number): Promise<Restaurant[]> {
 export async function searchRestaurantThumbnails(
   page: number,
   body: {
-    searchBar: string;
     strictTags: boolean;
     tags: { name: string; type: string; emoji: string }[];
   }

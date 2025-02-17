@@ -164,7 +164,7 @@ const LoggedNavbar: React.FC<LoggedNavbarProps> = ({ profilePic }) => {
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 flex items-center">
-          <li className={`${isAddRestaurant ? "text-blue-400" : ""}`}>
+          <li className={`${isAddRestaurant ? "text-red-500" : ""}`}>
             <Link href="/add-restaurant">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -172,7 +172,7 @@ const LoggedNavbar: React.FC<LoggedNavbarProps> = ({ profilePic }) => {
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className={`w-6 h-6 ${isAddRestaurant ? "text-blue-400" : ""}`}
+                className={`w-6 h-6 ${isAddRestaurant ? "text-red-500" : ""}`}
               >
                 <path
                   strokeLinecap="round"
@@ -183,7 +183,7 @@ const LoggedNavbar: React.FC<LoggedNavbarProps> = ({ profilePic }) => {
               Add Restaurant
             </Link>
           </li>
-          <li className={`${inSearchPage ? "text-blue-400" : ""}`}>
+          <li className={`${inSearchPage ? "text-red-500" : ""}`}>
             <Link href="/search">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -191,7 +191,7 @@ const LoggedNavbar: React.FC<LoggedNavbarProps> = ({ profilePic }) => {
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className={`w-6 h-6 ${inSearchPage ? "text-blue-400" : ""}`}
+                className={`w-6 h-6 ${inSearchPage ? "text-red-500" : ""}`}
               >
                 <path
                   strokeLinecap="round"
@@ -202,7 +202,7 @@ const LoggedNavbar: React.FC<LoggedNavbarProps> = ({ profilePic }) => {
               Search
             </Link>
           </li>
-          <li className={`${inNewPage ? "text-blue-400" : ""}`}>
+          <li className={`${inNewPage ? "text-red-500" : ""}`}>
             <Link href="/new">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -210,7 +210,7 @@ const LoggedNavbar: React.FC<LoggedNavbarProps> = ({ profilePic }) => {
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className={`w-6 h-6 ${inNewPage ? "text-blue-400" : ""}`}
+                className={`w-6 h-6 ${inNewPage ? "text-red-500" : ""}`}
               >
                 <path
                   strokeLinecap="round"
@@ -221,7 +221,7 @@ const LoggedNavbar: React.FC<LoggedNavbarProps> = ({ profilePic }) => {
               New
             </Link>
           </li>
-          <li className={`${inPopularPage ? "text-blue-400" : ""}`}>
+          <li className={`${inPopularPage ? "text-red-500" : ""}`}>
             <Link href="/popular">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -229,7 +229,7 @@ const LoggedNavbar: React.FC<LoggedNavbarProps> = ({ profilePic }) => {
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className={`w-6 h-6 ${inPopularPage ? "text-blue-400" : ""}`}
+                className={`w-6 h-6 ${inPopularPage ? "text-red-500" : ""}`}
               >
                 <path
                   strokeLinecap="round"

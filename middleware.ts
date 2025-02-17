@@ -3,19 +3,17 @@ import type { NextRequest } from "next/server";
 import { isLoggedIn } from "./app/lib/AuthData";
 
 export async function middleware(request: NextRequest) {
-  const cookiesString = request.headers.get("cookie") || "";
-  const isUserLoggedIn = await isLoggedIn(cookiesString);
   const { pathname } = request.nextUrl;
 
-  const loggedOutOnlyPaths = ["/sign-in", "/"];
-  if (loggedOutOnlyPaths.includes(pathname)) {
-    if (isUserLoggedIn) {
-      return NextResponse.redirect(new URL("/search", request.url));
-    }
+  const authToken = request.cookies.get("auth-token")?.value || "";
+
+  const userLoggedIn = await isLoggedIn(authToken);
+
+  if (pathname === "/" || pathname === "/sign-in") {
     return NextResponse.next();
   }
 
-  if (!isUserLoggedIn) {
+  if (!userLoggedIn) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
@@ -30,7 +28,5 @@ export const config = {
     "/add-restaurant",
     "/profile/:path*",
     "/restaurant/:path*",
-    "/sign-in",
-    "/",
   ],
 };
