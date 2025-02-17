@@ -5,7 +5,7 @@ import { isLoggedIn } from "./app/lib/AuthData";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const authToken = request.cookies.get("auth-token")?.value || "";
+  const authToken = request.cookies.get("JSESSIONID")?.value || "";
 
   const userLoggedIn = await isLoggedIn(authToken);
 
